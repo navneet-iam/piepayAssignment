@@ -8,54 +8,55 @@ import {
   Pressable,
   Modal,
 } from 'react-native';
-import WebView from 'react-native-webview';
 import Background from '../components/Background';
 import SearchBar from '../components/SearchBar';
 import EcomTile from '../components/EcomTile';
 import LatestPurchasesTile from '../components/LatestPurchasesTile';
+import EnhancedWebView from '../components/EnhanceWebView';
+// import EnhancedWebView from '../components/EnhancedWebView';
 
 // ---------- mock data ---------- //
 const MOCK_MERCHANTS = [
   {
     id: 'flipkart',
     name: 'Flipkart',
-    logoUrl:
-      'https://www.google.com/url?sa=i&url=https%3A%2F%2Fin.pinterest.com%2Fpin%2Fflipkart-logo-png-images--850547079633661907%2F&psig=AOvVaw08MSXC-TTcdes9F2TB-q1D&ust=1753611827273000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCIDijaKn2o4DFQAAAAAdAAAAABAE',
+    logoUrl: 'https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Logo.png',
     websiteUrl: 'https://www.flipkart.com',
     categories: [
       {
         title: 'Mobiles',
-        imageUrl: 'https://img.icons8.com/fluency/96/000000/iphone-x1.png',
+        imageUrl: 'https://img.icons8.com/fluency/96/000000/iphone-x.png',
         productPageUrl: 'https://www.flipkart.com/mobile-phones-store',
       },
       {
         title: 'Fashion',
-        imageUrl:
-          'https://photo-cdn2.icons8.com/5-TM0TBn2MG_IrbA7Pn5I9ZbCV2t8i-WmyZNh6m3nKE/rs:fit:576:385/czM6Ly9pY29uczgu/bW9vc2UtcHJvZC5h/c3NldHMvYXNzZXRz/L3NhdGEvb3JpZ2lu/YWwvNzkzLzhhMTIw/Mjg5LWIyMmItNGI1/Yy05ZWQzLWZlZDVh/YzE0MDRjZC5qcGc.webp',
-        productPageUrl: 'https://www.flipkart.com/clothing/pr?sid=2oq',
+        imageUrl: 'https://img.icons8.com/fluency/96/000000/clothes.png',
+        productPageUrl: 'https://www.flipkart.com/clothing-and-accessories/pr?sid=clo',
       },
       {
         title: 'Electronics',
         imageUrl: 'https://img.icons8.com/fluency/96/000000/laptop.png',
-        productPageUrl:
-          'https://www.flipkart.com/flipkart-electronics-new-store',
+        productPageUrl: 'https://www.flipkart.com/electronics/pr?sid=6bo',
       },
       {
         title: 'Home',
         imageUrl: 'https://img.icons8.com/fluency/96/000000/sofa.png',
-        productPageUrl: 'https://www.flipkart.com/furniture-store',
+        productPageUrl: 'https://www.flipkart.com/furniture/pr?sid=wwe',
       },
       {
         title: 'Beauty',
-        imageUrl:
-          'https://photo-cdn2.icons8.com/4vvSfsIqLqnZk9FRQx-5gU4hNZ8PMElu0ufJB63oEQY/rs:fit:576:385/czM6Ly9pY29uczgu/bW9vc2UtcHJvZC5h/c3NldHMvYXNzZXRz/L3NhdGEvb3JpZ2lu/YWwvNDMyL2MwZDhi/NWI5LTFmZmItNGNh/Yy05YTg0LTY3NGRi/ZjQxZTFkYS5qcGc.webp',
-        productPageUrl:
-          'https://www.flipkart.com/beauty-and-personal-care/pr?sid=t06',
+        imageUrl: 'https://img.icons8.com/fluency/96/000000/lipstick.png',
+        productPageUrl: 'https://www.flipkart.com/beauty-and-grooming/pr?sid=p13',
       },
       {
         title: 'Toys',
         imageUrl: 'https://img.icons8.com/fluency/96/000000/teddy-bear.png',
-        productPageUrl: 'https://www.flipkart.com/toys-online-store',
+        productPageUrl: 'https://www.flipkart.com/toys-and-baby-care/pr?sid=abc',
+      },
+      {
+        title: 'Books',
+        imageUrl: 'https://img.icons8.com/fluency/96/000000/book.png',
+        productPageUrl: 'https://www.flipkart.com/books/pr?sid=bks',
       },
     ],
   },
@@ -89,7 +90,7 @@ const MOCK_PRODUCTS = [
       'https://www.flipkart.com/dell-latitude-3440-2024-intel-core-i3-12th-gen-1215u-8-gb-512-gb-ssd-windows-11-pro-business-laptop/p/itm7f265faf0871e?pid=COMH5G3F8BGPNY9N',
   },
   {
-    id: 3,
+    id: 4,
     title: 'Wrist Watch',
     imageUrl:
       'https://www.vaerwatches.com/cdn/shop/files/38-wristWrist-Shot-Lime.jpg?v=1712715073&width=600',
@@ -109,9 +110,15 @@ const ExploreScreen = () => {
     setSearchQuery('');
   };
 
-  const _ = Array.from({ length: 2000000 }, (_, i) => i * Math.random()).sort(
-    (a, b) => b - a,
-  );
+  const handleCategoryPress = (url) => {
+    console.log('🔗 Opening category URL:', url);
+    setWebUri(url);
+  };
+
+  const handleMerchantPress = (url) => {
+    console.log('🏪 Opening merchant URL:', url);
+    setWebUri(url);
+  };
 
   return (
     <Background>
@@ -132,11 +139,8 @@ const ExploreScreen = () => {
           <EcomTile
             key={merchant.id}
             merchant={merchant}
-            onPress={() => {
-              // For this assignment, we hard-code Flipkart regardless of merchant pressed.
-              // You can swap merchant.websiteUrl if dynamic behaviour is needed.
-              setWebUri('https://www.flipkart.com');
-            }}
+            onPress={() => handleMerchantPress(merchant.websiteUrl)}
+            onCategoryPress={handleCategoryPress}
           />
         ))}
 
@@ -154,17 +158,17 @@ const ExploreScreen = () => {
         />
       </ScrollView>
 
-      {/* WebView modal */}
+      {/* Enhanced WebView modal */}
       <Modal visible={!!webUri} animationType="slide">
         <View style={{ flex: 1 }}>
           <Pressable style={styles.closeBtn} onPress={() => setWebUri(null)}>
             <Text style={styles.closeText}>✕</Text>
           </Pressable>
           {webUri && (
-            <WebView
-              // ref={WEBVIEW_REF}
-              source={{ uri: webUri }}
-              startInLoadingState
+            <EnhancedWebView
+              uri={webUri}
+              onClose={() => setWebUri(null)}
+              apiBaseUrl="http://localhost:3001"
             />
           )}
         </View>
@@ -180,52 +184,46 @@ const HeaderSection = () => {
   return (
     <View style={headerStyles.container}>
       <Text style={headerStyles.welcomeText}>Welcome!</Text>
+      <Text style={headerStyles.subText}>Find amazing deals on your favorite products</Text>
     </View>
   );
 };
 
-const headerStyles = StyleSheet.create({
-  container: {
-    marginTop: 20,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  welcomeText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#212121',
-  },
-  walletBtn: {
-    height: 36,
-    width: 36,
-    borderRadius: 18,
-    backgroundColor: '#F1F1F1',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  walletText: {
-    fontSize: 18,
-    fontWeight: '700',
-  },
-});
-
 const styles = StyleSheet.create({
   closeBtn: {
     position: 'absolute',
-    zIndex: 2,
-    top: 40,
+    top: 50,
     right: 20,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: 16,
-    width: 32,
-    height: 32,
+    zIndex: 1000,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
   closeText: {
-    color: '#FFF',
+    color: 'white',
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+
+const headerStyles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: 'transparent',
+  },
+  welcomeText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#212121',
+    marginBottom: 4,
+  },
+  subText: {
+    fontSize: 16,
+    color: '#666',
+    fontWeight: '400',
   },
 });
